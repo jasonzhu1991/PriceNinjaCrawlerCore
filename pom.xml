@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.wedemboys</groupId>
+  <artifactId>priceninja-crawlercore</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>PriceNinjaCrawlerCore</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <github.global.server>github</github.global.server>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.wedemboys</groupId>
+      <artifactId>priceninja-servicemodel</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
+  <!-- For information on maven repository, see: https://github.com/WeDemBoys/PriceNinjaWiki/wiki/Maven-Repository-Hosting for more information -->
+  <distributionManagement>
+    <repository>
+      <id>internal.repo</id>
+      <name>Temporary Staging Repository</name>
+      <url>file://${project.build.directory}/mvn-repo</url>
+    </repository>
+  </distributionManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.11</version>
+        <configuration>
+          <!-- git commit message -->
+          <message>Maven artifacts for ${project.version}</message>
+          <!-- disable webpage processing -->
+          <noJekyll>true</noJekyll>
+          <!-- matches distribution management repository url above -->
+          <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+          <!-- remote branch name -->
+          <branch>refs/heads/mvn-repo</branch>
+          <!-- include all files -->
+          <includes>
+            <include>**/*</include>
+          </includes>
+          <!-- ignore mac noises -->
+          <excludes>
+            <exclude>**/.DS_Store</exclude>
+          </excludes>
+          <!-- merge into maven repository instead replacing -->
+          <merge>true</merge>
+          <!-- github repo name -->
+          <repositoryName>PriceNinjaMavenRepository</repositoryName>
+          <!-- github username -->
+          <repositoryOwner>WeDemBoys</repositoryOwner>
+        </configuration>
+        <executions>
+          <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>deploy</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>priceninja-mavenrepo</id>
+      <url>https://raw.github.com/wedemboys/priceninjamavenrepository/mvn-repo</url>
+      <releases>
+        <enabled>false</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+</project>
